@@ -1,0 +1,24 @@
+# Virtual environment
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Models (VERY IMPORTANT - huge files)
+vosk-model-small-en-us-0.15/
+
+# Environment variables
+.env
+
+# VS Code
+.vscode/
+
+# Logs / temp
+*.log
+*.tmp
+
+# OS junk
+.DS_Store
+Thumbs.db

@@ -1,0 +1,10 @@
+
+Command: git push origin main
+Explanation: Uploads your commits to the remote repository
+
+Command: git add .
+Explanation: Stages your changes (prepares files to be committed)
+
+Command: git commit -m 'auto'
+Explanation: Saves a snapshot of your project locally
+
