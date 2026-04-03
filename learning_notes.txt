@@ -8,3 +8,6 @@ Explanation: Stages your changes (prepares files to be committed)
 Command: git commit -m 'auto'
 Explanation: Saves a snapshot of your project locally
 
+Command: git status
+Explanation: Shows working tree status (staged, modified, untracked)
+

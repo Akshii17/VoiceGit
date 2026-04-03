@@ -1,1 +1,4 @@
 
+git status -> Shows working tree status (staged, modified, untracked)
+git push origin main -> Uploads your commits to the remote repository
+git push origin main -> Uploads your commits to the remote repository

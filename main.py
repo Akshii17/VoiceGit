@@ -20,6 +20,25 @@ from voice import listen_and_transcribe
 SUPPORTED_COMMANDS = {"help", "exit", "quit"}
 voice_mode = False
 
+# Intents handled by detect_intent → generate_commands → safety → execution
+GIT_PIPELINE_INTENTS = {
+    "status",
+    "add",
+    "commit",
+    "push",
+    "pull",
+    "init",
+    "clone",
+    "branch",
+    "checkout",
+    "merge",
+    "log",
+    "diff",
+    "reset",
+    "revert",
+    "stash",
+}
+
 
 def print_header(title: str) -> None:
     print(f"\n=== {title} ===")
@@ -66,16 +85,12 @@ def process_learning(commands: List[str]) -> None:
 
 def show_help() -> None:
     print("Supported commands:")
-    print("  status  - (intent) show `git status` output")
-    print("  state   - (command) show parsed repository state")
-    print("  commit  - (intent) suggest + execute commit flow")
-    print("  push    - (intent) suggest + execute push flow")
-    print("  voice on  - enable voice input mode")
-    print("  voice off - disable voice input mode")
-    print("  learn   - open live learning window")
-    print("  close learn - close learning window")
-    print("  help    - show this message")
-    print("  exit    - quit the tool")
+    print("  Natural language: status, add, commit, push, pull, init, clone,")
+    print("    branch, checkout, merge, log, diff, reset, revert, stash")
+    print("  state   - show parsed repository state")
+    print("  voice on / voice off - voice input toggle")
+    print("  learn / close learn - learning window")
+    print("  help / exit")
 
 
 def handle_command_text(user_cmd: str) -> bool:
@@ -138,34 +153,38 @@ def handle_command_text(user_cmd: str) -> bool:
     intent = detect_intent(user_cmd)
     print(f"Detected intent: {intent}")
 
-    if intent in {"status", "commit", "push"}:
-        try:
-            state = get_repo_state()
-            suggested = generate_commands(intent, state)
-            print_suggested_commands(suggested)
-
-            ok, reason = validate_commands(suggested, state)
-            if not ok:
-                print_error(f"Unsafe to execute: {reason}")
-                return True
-
-            if not confirm_proceed():
-                print("Cancelled.")
-                return True
-
-            process_learning(suggested)
-            execute_commands(suggested)
-        except RuntimeError as e:
-            print_error(str(e))
-        except Exception as e:
-            print_error(f"Unexpected error: {e}")
+    if intent == "unknown":
+        print_error(f"Unknown input: {user_cmd!r}. Type 'help' for options.")
         return True
 
-    if intent in {"add", "create_branch"}:
-        print_error(f"Intent '{intent}' detected, but it is not implemented yet.")
+    if intent not in GIT_PIPELINE_INTENTS:
+        print_error(f"Intent '{intent}' is not supported.")
         return True
 
-    print_error(f"Unknown input: {user_cmd!r}. Type 'help' for options.")
+    try:
+        if intent in {"init", "clone"}:
+            repo_state = None
+        else:
+            repo_state = get_repo_state()
+
+        suggested = generate_commands(intent, repo_state)
+        print_suggested_commands(suggested)
+
+        ok, reason = validate_commands(suggested, repo_state)
+        if not ok:
+            print_error(f"Unsafe to execute: {reason}")
+            return True
+
+        if not confirm_proceed():
+            print("Cancelled.")
+            return True
+
+        process_learning(suggested)
+        execute_commands(suggested)
+    except RuntimeError as e:
+        print_error(str(e))
+    except Exception as e:
+        print_error(f"Unexpected error: {e}")
     return True
 
 

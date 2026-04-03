@@ -1,45 +1,85 @@
 from __future__ import annotations
 
-from typing import List
+import json
+from typing import List, Optional
 
 from state import RepoState
 
 
-def generate_commands(intent: str, state: RepoState) -> List[str]:
+def generate_commands(
+    intent: str,
+    state: Optional[RepoState],
+) -> List[str]:
     """
-    Generate deterministic git commands (as strings) from an intent + RepoState.
+    Build a list of git command strings from intent + optional RepoState.
 
-    Notes:
-    - Errors are represented as a single-element list starting with "ERROR:".
-    - Logic is intentionally simple and driven only by RepoState.
+    repo-only intents require ``state``; ``init`` and ``clone`` work with ``state is None``.
+    Uses ``input()`` for clone URL, branch names, and commit message when needed.
     """
     normalized = (intent or "").strip().lower()
+
+    if normalized == "init":
+        return ["git init"]
+
+    if normalized == "clone":
+        url = input("Repository URL: ").strip()
+        if not url:
+            return ["ERROR: no repository URL provided"]
+        return [f"git clone {url}"]
+
+    if state is None:
+        return ["ERROR: not inside a repository context for this command"]
 
     if normalized == "status":
         return ["git status"]
 
+    if normalized == "add":
+        return ["git add ."]
+
     if normalized == "commit":
-        if not state.has_changes:
+        if not state.has_changes and state.staged_files == 0:
             return ["ERROR: no changes"]
-        return ["git add .", "git commit -m 'auto'"]
+        message = input("Commit message (empty = auto commit): ").strip()
+        if not message:
+            message = "auto commit"
+        return [f"git commit -m {json.dumps(message)}"]
 
     if normalized == "push":
         if not state.has_commits:
             return ["ERROR: no commits"]
+        return ["git push origin main"]
 
-        cmds: List[str] = []
+    if normalized == "pull":
+        return ["git pull origin main"]
 
-        # "changes not staged" heuristic: repo has changes but nothing staged yet.
-        changes_not_staged = state.has_changes and state.staged_files == 0
-        if changes_not_staged:
-            cmds.append("git add .")
+    if normalized == "branch":
+        return ["git branch"]
 
-        # If there are changes, ensure they get committed before pushing.
-        if state.has_changes:
-            cmds.append("git commit -m 'auto'")
+    if normalized == "checkout":
+        name = input("Branch name: ").strip()
+        if not name:
+            return ["ERROR: no branch name provided"]
+        return [f"git checkout {name}"]
 
-        cmds.append("git push origin main")
-        return cmds
+    if normalized == "merge":
+        name = input("Branch to merge: ").strip()
+        if not name:
+            return ["ERROR: no branch name provided"]
+        return [f"git merge {name}"]
+
+    if normalized == "log":
+        return ["git log"]
+
+    if normalized == "diff":
+        return ["git diff"]
+
+    if normalized == "reset":
+        return ["git reset --soft HEAD~1"]
+
+    if normalized == "revert":
+        return ["git revert HEAD"]
+
+    if normalized == "stash":
+        return ["git stash"]
 
     return ["ERROR: unknown intent"]
-
