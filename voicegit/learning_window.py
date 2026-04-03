@@ -24,7 +24,7 @@ def main() -> None:
     text.pack(fill="both", expand=True, padx=8, pady=8)
 
     text.configure(state="normal")
-    text.insert("end", "Learning window started. Listening for explanations...\n")
+    text.insert("end", "Run commands and get explanations...\n")
     text.configure(state="disabled")
 
     stream = STREAM_FILE.open("r", encoding="utf-8")
