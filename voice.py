@@ -4,26 +4,20 @@ import json
 import queue
 from pathlib import Path
 
-try:
-    import sounddevice as sd
-except Exception:
-    sd = None
-
-try:
-    from vosk import KaldiRecognizer, Model
-except Exception:
-    KaldiRecognizer = None
-    Model = None
-
-
 MODEL_DIR = Path(__file__).resolve().parent / "vosk-model-small-en-us-0.15"
 
 
 def listen_and_transcribe() -> str | None:
-    if sd is None or Model is None or KaldiRecognizer is None:
+    """
+    Lazy-import sounddevice/vosk here so importing main.py does not init PortAudio.
+    """
+    try:
+        import sounddevice as sd
+        from vosk import KaldiRecognizer, Model
+    except ImportError as e:
         raise RuntimeError(
             "Voice dependencies missing. Install with: pip install -r requirements.txt"
-        )
+        ) from e
 
     if not MODEL_DIR.exists():
         print("Vosk model not found. Please download it.")
@@ -33,7 +27,6 @@ def listen_and_transcribe() -> str | None:
 
     def callback(indata, frames, time, status) -> None:  # type: ignore[no-untyped-def]
         if status:
-            # Keep going; recognizer can still continue.
             print(f"Audio status: {status}")
         q.put(bytes(indata))
 
@@ -52,7 +45,6 @@ def listen_and_transcribe() -> str | None:
             channels=1,
             callback=callback,
         ):
-            # Try for up to ~10 seconds.
             for _ in range(20):
                 data = q.get(timeout=0.5)
                 if data:
@@ -83,7 +75,9 @@ def listen_and_transcribe() -> str | None:
     except queue.Empty:
         print("No speech detected.")
         return None
+    except OSError as e:
+        raise RuntimeError(
+            f"Audio device error (PortAudio): {e}. Try unplugging USB audio or run without voice mode."
+        ) from e
     except Exception as e:
-        # Let caller fall back to text input.
         raise RuntimeError(f"Microphone or voice processing error: {e}") from e
-

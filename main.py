@@ -4,7 +4,7 @@ from typing import List
 import learning
 from commands import generate_commands
 from executor import execute_commands
-from intent import detect_intent
+from intent import ALL_INTENTS, classify
 from learning import (
     explain_command,
     start_learning_window,
@@ -20,24 +20,7 @@ from voice import listen_and_transcribe
 SUPPORTED_COMMANDS = {"help", "exit", "quit"}
 voice_mode = False
 
-# Intents handled by detect_intent → generate_commands → safety → execution
-GIT_PIPELINE_INTENTS = {
-    "status",
-    "add",
-    "commit",
-    "push",
-    "pull",
-    "init",
-    "clone",
-    "branch",
-    "checkout",
-    "merge",
-    "log",
-    "diff",
-    "reset",
-    "revert",
-    "stash",
-}
+CLASSIFY_MIN_CONFIDENCE = 0.35
 
 
 def print_header(title: str) -> None:
@@ -85,8 +68,8 @@ def process_learning(commands: List[str]) -> None:
 
 def show_help() -> None:
     print("Supported commands:")
-    print("  Natural language: status, add, commit, push, pull, init, clone,")
-    print("    branch, checkout, merge, log, diff, reset, revert, stash")
+    print("  Natural language (ML): create_branch, merge_branch, commit, push,")
+    print("    pull, status, add, log, diff, clone, init, stash, reset")
     print("  state   - show parsed repository state")
     print("  voice on / voice off - voice input toggle")
     print("  learn / close learn - learning window")
@@ -150,14 +133,18 @@ def handle_command_text(user_cmd: str) -> bool:
             print_error(f"Unexpected error: {e}")
         return True
 
-    intent = detect_intent(user_cmd)
-    print(f"Detected intent: {intent}")
+    intent, confidence = classify(user_cmd)
 
-    if intent == "unknown":
-        print_error(f"Unknown input: {user_cmd!r}. Type 'help' for options.")
+    print(f"Input: {user_cmd}")
+    print(f"Intent: {intent}")
+    print(f"Confidence: {confidence}")
+    print(f"Detected intent: {intent} (confidence: {confidence})")
+
+    if confidence < CLASSIFY_MIN_CONFIDENCE or intent == "unknown":
+        print("Could not understand confidently. Try rephrasing.")
         return True
 
-    if intent not in GIT_PIPELINE_INTENTS:
+    if intent not in ALL_INTENTS:
         print_error(f"Intent '{intent}' is not supported.")
         return True
 

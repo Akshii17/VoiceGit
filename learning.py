@@ -29,6 +29,8 @@ def explain_command(cmd: str) -> str:
         return "Uploads your commits to the remote repository"
     if text.startswith("git pull"):
         return "Downloads and integrates changes from the remote repository"
+    if text.startswith("git checkout -b"):
+        return "Creates a new branch and switches to it"
     if text.startswith("git checkout"):
         return "Switches branches or restores working tree files"
     if text.startswith("git merge"):
