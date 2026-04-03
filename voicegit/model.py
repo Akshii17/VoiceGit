@@ -6,7 +6,10 @@ from typing import Optional
 
 import joblib
 
-from dataset import TRAINING_DATA
+try:
+    from .dataset import TRAINING_DATA
+except ImportError:
+    from dataset import TRAINING_DATA
 
 MODEL_VERSION = "v1"
 MODULE_DIR = Path(__file__).resolve().parent

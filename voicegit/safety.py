@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from typing import List, Optional, Tuple
 
-from state import RepoState
+try:
+    from .state import RepoState
+except ImportError:
+    from state import RepoState
 
 
 def validate_commands(

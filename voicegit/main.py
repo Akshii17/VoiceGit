@@ -1,20 +1,37 @@
 import sys
 from typing import List
 
-import learning
-from commands import generate_commands
-from executor import execute_commands
-from intent import ALL_INTENTS, classify
-from learning import (
-    explain_command,
-    start_learning_window,
-    stop_learning_window,
-    store_learning,
-    write_to_learning_stream,
-)
-from safety import validate_commands
-from state import get_repo_state
-from voice import listen_and_transcribe
+try:
+    from . import learning
+    from .commands import generate_commands
+    from .executor import execute_commands
+    from .intent import ALL_INTENTS, classify
+    from .learning import (
+        explain_command,
+        start_learning_window,
+        stop_learning_window,
+        store_learning,
+        write_to_learning_stream,
+    )
+    from .safety import validate_commands
+    from .state import get_repo_state
+    from .voice import listen_and_transcribe
+except ImportError:
+    # Fallback for direct execution: python voicegit/main.py
+    import learning
+    from commands import generate_commands
+    from executor import execute_commands
+    from intent import ALL_INTENTS, classify
+    from learning import (
+        explain_command,
+        start_learning_window,
+        stop_learning_window,
+        store_learning,
+        write_to_learning_stream,
+    )
+    from safety import validate_commands
+    from state import get_repo_state
+    from voice import listen_and_transcribe
 
 
 SUPPORTED_COMMANDS = {"help", "exit", "quit"}

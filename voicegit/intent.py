@@ -1,10 +1,15 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from typing import Optional
 
-from dataset import TRAINING_DATA
-from keywords import KEYWORD_RULES
-from model import predict_intent
+try:
+    from .dataset import TRAINING_DATA
+    from .keywords import KEYWORD_RULES
+    from .model import predict_intent
+except ImportError:
+    from dataset import TRAINING_DATA
+    from keywords import KEYWORD_RULES
+    from model import predict_intent
 
 CONFIDENCE_THRESHOLD: float = 0.45
 

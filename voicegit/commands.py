@@ -3,8 +3,12 @@ from __future__ import annotations
 import json
 from typing import List, Optional
 
-from intent import ALL_INTENTS
-from state import RepoState
+try:
+    from .intent import ALL_INTENTS
+    from .state import RepoState
+except ImportError:
+    from intent import ALL_INTENTS
+    from state import RepoState
 
 
 def _needs_stage_all(state: RepoState) -> bool:
