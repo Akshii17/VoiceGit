@@ -209,7 +209,7 @@ KEYWORD_RULES: list[tuple[list[str], str]] = [
       "undo my last commit", "remove last commit",
       "undo commit", "take back commit",
       "go back to previous state", "undo in git",
-      "throw away uncommitted", "discard all local"], "reset"),
+      "throw away uncommitted", "discard all local", "reset"], "reset"),
 
     # ── stash  (AFTER stash variants) ─────────────────────────────────────────
     (["git stash", "stash my", "stash changes",
@@ -300,7 +300,7 @@ KEYWORD_RULES: list[tuple[list[str], str]] = [
       "save a snapshot", "lock in my changes", "commit staged",
       "commit everything", "commit with the message",
       "commit all my changes", "commit all staged",
-      "record my changes", "store my work", "commit"], "commit"),
+      "record my changes", "store my work", "commit", "save"], "commit"),
 
     # ── push  (AFTER push variants) ────────────────────────────────────────────
     (["push", "upload my changes", "upload my commits",

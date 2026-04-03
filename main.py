@@ -31,8 +31,13 @@ def print_error(message: str) -> None:
     print(f"\nError: {message}", file=sys.stderr)
 
 
+def print_warning(message: str) -> None:
+    # Red warning text for high-risk operations.
+    print(f"\n\033[31mWARNING: {message}\033[0m")
+
+
 def print_suggested_commands(commands: List[str]) -> None:
-    print_header("suggested commands")
+    print_header("running commands")
     for c in commands:
         print(f"- {c}")
 
@@ -67,10 +72,8 @@ def process_learning(commands: List[str]) -> None:
 
 
 def show_help() -> None:
-    print("Supported commands:")
-    print("  Natural language (ML): create_branch, merge_branch, commit, push,")
-    print("  pull, status, add, log, diff, clone, init, stash, reset")
-    print("  state   - show parsed repository state")
+    print(" System commands: ")
+    print("  Supports git commands in natural language")
     print("  voice on / voice off - voice input toggle")
     print("  learn / close learn - learning window")
     print("  help / exit")
@@ -135,10 +138,10 @@ def handle_command_text(user_cmd: str) -> bool:
 
     intent, confidence = classify(user_cmd)
 
-    print(f"Input: {user_cmd}")
-    print(f"Intent: {intent}")
-    print(f"Confidence: {confidence}")
-    print(f"Detected intent: {intent} (confidence: {confidence})")
+    #print(f"Input: {user_cmd}")
+    #print(f"Intent: {intent}")
+    #print(f"Confidence: {confidence}")
+    #print(f"Detected intent: {intent})")
 
     if confidence < CLASSIFY_MIN_CONFIDENCE or intent == "unknown":
         print("Could not understand confidently. Try rephrasing.")
@@ -161,6 +164,8 @@ def handle_command_text(user_cmd: str) -> bool:
         if not ok:
             print_error(f"Unsafe to execute: {reason}")
             return True
+        if reason.startswith("WARNING: "):
+            print_warning(reason.removeprefix("WARNING: "))
 
         if not confirm_proceed():
             print("Cancelled.")

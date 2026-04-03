@@ -56,16 +56,45 @@ def store_learning(cmd: str, explanation: str) -> None:
     if not cmd or not explanation:
         return
 
+    def canonical_command_key(command: str) -> str:
+        text = command.strip().lower()
+
+        # Collapse variable argument variants (messages, branch names, file paths, URLs).
+        prefix_to_key = [
+            ("git commit --amend", "git commit --amend"),
+            ("git commit", "git commit"),
+            ("git checkout -b", "git checkout -b <branch>"),
+            ("git checkout", "git checkout <branch>"),
+            ("git merge --squash", "git merge --squash <branch>"),
+            ("git merge", "git merge <branch>"),
+            ("git push -u origin", "git push -u origin <branch>"),
+            ("git push origin", "git push origin <branch>"),
+            ("git clone -b", "git clone -b <branch> <url>"),
+            ("git clone --depth", "git clone --depth <n> <url>"),
+            ("git clone", "git clone <url>"),
+            ("git blame", "git blame <file>"),
+            ("git restore", "git restore <file>"),
+            ("git reset head", "git reset HEAD <file>"),
+            ("git branch -d", "git branch -d <branch>"),
+            ("git rebase", "git rebase <branch>"),
+        ]
+
+        for prefix, key in prefix_to_key:
+            if text.startswith(prefix):
+                return key
+
+        return command.strip()
+
     NOTES_FILE.touch(exist_ok=True)
     content = NOTES_FILE.read_text(encoding="utf-8")
-    marker = f"Command: {cmd}"
+    marker = f"Command: {canonical_command_key(cmd)}"
     if marker in content:
         return
 
     with NOTES_FILE.open("a", encoding="utf-8") as f:
         if content and not content.endswith("\n"):
             f.write("\n")
-        f.write(f"Command: {cmd}\n")
+        f.write(f"Command: {canonical_command_key(cmd)}\n")
         f.write(f"Explanation: {explanation}\n\n")
 
 
