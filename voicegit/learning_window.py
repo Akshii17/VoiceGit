@@ -4,8 +4,16 @@ from pathlib import Path
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
 
-
-STREAM_FILE = Path(__file__).resolve().parent / "learning_stream.txt"
+# Must match learning.STREAM_FILE (writer) or the window tails the wrong file.
+try:
+    from .learning import STREAM_FILE
+except ImportError:
+    try:
+        from learning import STREAM_FILE
+    except ImportError:
+        _SCRIPT = Path(__file__).resolve().parent
+        _ROOT = _SCRIPT.parent
+        STREAM_FILE = (_ROOT if _ROOT.exists() else _SCRIPT) / "learning_stream.txt"
 
 
 def main() -> None:
