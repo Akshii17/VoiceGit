@@ -6,8 +6,8 @@ authors = [{name = "Your Name"}]
 dependencies = [
     "scikit-learn",
     "joblib",
-    "textblob"
-    "vosk"
+    "textblob",
+    "vosk",
     "sounddevice"
 ]
 
