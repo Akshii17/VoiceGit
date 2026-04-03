@@ -32,6 +32,8 @@ def explain_command(cmd: str) -> str:
         return "Uploads your commits to the remote repository"
     if text.startswith("git pull"):
         return "Downloads and integrates changes from the remote repository"
+    if text.startswith("git remote add"):
+        return "Connects your local repository to a remote (name + URL) so you can fetch and push"
     if text.startswith("git checkout -b"):
         return "Creates a new branch and switches to it"
     if text.startswith("git checkout"):
@@ -75,6 +77,7 @@ def store_learning(cmd: str, explanation: str) -> None:
             ("git clone -b", "git clone -b <branch> <url>"),
             ("git clone --depth", "git clone --depth <n> <url>"),
             ("git clone", "git clone <url>"),
+            ("git remote add", "git remote add <name> <url>"),
             ("git blame", "git blame <file>"),
             ("git restore", "git restore <file>"),
             ("git reset head", "git reset HEAD <file>"),

@@ -145,6 +145,13 @@ def generate_commands(
     if normalized == "fetch":
         return ["git fetch"]
 
+    if normalized == "remote_add":
+        name = input("Remote name (press Enter for origin): ").strip() or "origin"
+        url = _prompt_nonempty("Remote repository URL: ", "remote URL")
+        if url is None:
+            return ["ERROR: no remote URL provided"]
+        return [f"git remote add {json.dumps(name)} {json.dumps(url)}"]
+
     # ── Branching ───────────────────────────────────────────────────────────
     if normalized == "list_branches":
         return ["git branch -a"]
