@@ -20,3 +20,12 @@ Explanation: Shows commit history
 Command: git commit -m "added all files"
 Explanation: Saves a snapshot of your project locally
 
+Command: git branch -a
+Explanation: Lists, creates, or deletes branches
+
+Command: git checkout main
+Explanation: Switches branches or restores working tree files
+
+Command: git commit -m "separated files and improved logic"
+Explanation: Saves a snapshot of your project locally
+

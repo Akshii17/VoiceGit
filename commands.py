@@ -86,8 +86,10 @@ def generate_commands(
         return ["git commit --amend"]
 
     if normalized == "push":
-        if not state.has_commits:
-            return ["ERROR: no commits"]
+        # State-driven push flow:
+        # - unstaged changes -> add + commit + push
+        # - staged changes only -> commit + push
+        # - no local changes -> push only
         cmds: List[str] = []
         if state.has_changes:
             if _needs_stage_all(state):
@@ -96,6 +98,10 @@ def generate_commands(
             if not message:
                 message = "auto commit"
             cmds.append(f"git commit -m {json.dumps(message)}")
+        # If there are absolutely no commits and no local changes, pushing is invalid.
+        if not state.has_commits and not cmds:
+            return ["ERROR: no commits to push"]
+
         cmds.append("git push origin main")
         return cmds
 
