@@ -3,3 +3,6 @@ git status -> Shows working tree status (staged, modified, untracked)
 git add . -> Stages your changes (prepares files to be committed)
 git commit -m "fixed learning window" -> Saves a snapshot of your project locally
 git push origin main -> Uploads your commits to the remote repository
+git add . -> Stages your changes (prepares files to be committed)
+git commit -m "minor change" -> Saves a snapshot of your project locally
+git push origin main -> Uploads your commits to the remote repository

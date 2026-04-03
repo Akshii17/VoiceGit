@@ -240,7 +240,7 @@ KEYWORD_RULES: list[tuple[list[str], str]] = [
     (["new branch", "create branch", "make a branch", "checkout -b",
       "switch -c", "a new branch", "make branch", "spin up a branch",
       "bug fix branch", "start a branch",
-      "isolate my changes", "create and switch to a new branch"], "create_branch"),
+      "isolate my changes"], "create_branch"),
 
     # ── checkout  (AFTER create_branch) ───────────────────────────────────────
     ("switch","switch branch", "switch to branch" "switch to main", "switch to master", "switch to develop",
