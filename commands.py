@@ -24,6 +24,18 @@ def _prompt_nonempty(prompt: str, what: str) -> str | None:
     return value
 
 
+def _pick_push_branch(state: RepoState) -> str | None:
+    current = (state.current_branch or "").strip()
+    if current and not current.startswith("("):
+        answer = input(f"Push to current branch 'origin/{current}'? (y/n) ").strip().lower()
+        if answer in {"y", "yes", ""}:
+            return current
+        custom = _prompt_nonempty("Branch name to push: ", "branch name")
+        return custom
+    # Detached/unknown branch: ask explicitly.
+    return _prompt_nonempty("Branch name to push: ", "branch name")
+
+
 def generate_commands(
     intent: str,
     state: Optional[RepoState],
@@ -102,7 +114,10 @@ def generate_commands(
         if not state.has_commits and not cmds:
             return ["ERROR: no commits to push"]
 
-        cmds.append("git push origin main")
+        branch = _pick_push_branch(state)
+        if not branch:
+            return ["ERROR: no branch name provided"]
+        cmds.append(f"git push origin {branch}")
         return cmds
 
     if normalized == "push_force":

@@ -86,7 +86,7 @@ def handle_command_text(user_cmd: str) -> bool:
     cmd_lower = user_cmd.lower()
     if cmd_lower in {"exit", "quit", "q"}:
         stop_learning_window()
-        print("Bye.")
+        print("Bye. See you next time!")
         return False
 
     if cmd_lower == "help":

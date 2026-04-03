@@ -41,3 +41,6 @@ Explanation: Switches branches or restores working tree files
 Command: git commit -m "changes"
 Explanation: Saves a snapshot of your project locally
 
+Command: git commit -m "push logic improved"
+Explanation: Saves a snapshot of your project locally
+
