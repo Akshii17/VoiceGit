@@ -280,7 +280,7 @@ KEYWORD_RULES: list[tuple[list[str], str]] = [
       "uncommitted changes", "what is staged", "untracked files",
       "pending changes", "modified files", "show me the status",
       "state of my files", "what files did i",
-      "what has been changed"], "status"),
+      "what has been changed", "status"], "status"),
 
     # ── add_patch  (BEFORE add) ────────────────────────────────────────────────
     (["add -p", "add patch", "interactive staging", "interactive add",
@@ -300,7 +300,7 @@ KEYWORD_RULES: list[tuple[list[str], str]] = [
       "save a snapshot", "lock in my changes", "commit staged",
       "commit everything", "commit with the message",
       "commit all my changes", "commit all staged",
-      "record my changes", "store my work"], "commit"),
+      "record my changes", "store my work", "commit"], "commit"),
 
     # ── push  (AFTER push variants) ────────────────────────────────────────────
     (["push", "upload my changes", "upload my commits",

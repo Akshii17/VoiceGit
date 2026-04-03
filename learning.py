@@ -86,16 +86,9 @@ def start_learning_window() -> None:
 
     STREAM_FILE.touch(exist_ok=True)
 
-    kwargs = {
-        "cwd": str(BASE_DIR),
-    }
-    # Open a separate window on Windows for the live console.
-    if sys.platform.startswith("win"):
-        kwargs["creationflags"] = subprocess.CREATE_NEW_CONSOLE
-
     _learning_process = subprocess.Popen(
         [sys.executable, str(WINDOW_SCRIPT)],
-        **kwargs,
+        cwd=str(BASE_DIR),
     )
     learning_mode = True
 
