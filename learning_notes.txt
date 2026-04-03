@@ -1,47 +1,7 @@
-
-Command: git push origin main
-Explanation: Uploads your commits to the remote repository
-
 Command: git add .
 Explanation: Stages your changes (prepares files to be committed)
 
-Command: git commit -m 'auto'
-Explanation: Saves a snapshot of your project locally
-
-Command: git status
-Explanation: Shows working tree status (staged, modified, untracked)
-
-Command: git checkout -b Trisha
-Explanation: Creates a new branch and switches to it
-
-Command: git log
-Explanation: Shows commit history
-
-Command: git commit -m "added all files"
-Explanation: Saves a snapshot of your project locally
-
-Command: git branch -a
-Explanation: Lists, creates, or deletes branches
-
-Command: git checkout main
-Explanation: Switches branches or restores working tree files
-
-Command: git commit -m "separated files and improved logic"
-Explanation: Saves a snapshot of your project locally
-
-Command: git commit -m "learning window fixed"
-Explanation: Saves a snapshot of your project locally
-
-Command: git commit -m "project completed"
-Explanation: Saves a snapshot of your project locally
-
-Command: git checkout Akshi
-Explanation: Switches branches or restores working tree files
-
-Command: git commit -m "changes"
-Explanation: Saves a snapshot of your project locally
-
-Command: git commit -m "push logic improved"
+Command: git commit
 Explanation: Saves a snapshot of your project locally
 
 Command: git push origin <branch>

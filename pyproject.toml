@@ -1,0 +1,19 @@
+[project]
+name = "voicegit"
+version = "0.1.0"
+description = "Voice-based Git assistant"
+authors = [{name = "Your Name"}]
+dependencies = [
+    "scikit-learn",
+    "joblib",
+    "textblob"
+    "vosk"
+    "sounddevice"
+]
+
+[project.scripts]
+voicegit = "voicegit.main:main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

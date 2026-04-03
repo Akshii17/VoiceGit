@@ -9,7 +9,27 @@ import joblib
 from dataset import TRAINING_DATA
 
 MODEL_VERSION = "v1"
-MODEL_PATH = Path(__file__).resolve().parent / "intent_model.pkl"
+MODULE_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = MODULE_DIR.parent
+
+
+def _resolve_model_path() -> Path:
+    """
+    Support both layouts:
+    - model file beside modules (voicegit/intent_model.pkl)
+    - model file at project root (intent_model.pkl)
+    """
+    root_candidate = PROJECT_ROOT / "intent_model.pkl"
+    module_candidate = MODULE_DIR / "intent_model.pkl"
+    if root_candidate.exists():
+        return root_candidate
+    if module_candidate.exists():
+        return module_candidate
+    # Default to root for new writes in current structure.
+    return root_candidate
+
+
+MODEL_PATH = _resolve_model_path()
 
 _pipeline: Optional[object] = None
 

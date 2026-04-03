@@ -6,10 +6,13 @@ from pathlib import Path
 from typing import Optional
 
 
-BASE_DIR = Path(__file__).resolve().parent
-NOTES_FILE = BASE_DIR / "learning_notes.txt"
-STREAM_FILE = BASE_DIR / "learning_stream.txt"
-WINDOW_SCRIPT = BASE_DIR / "learning_window.py"
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = SCRIPT_DIR.parent
+DATA_DIR = PROJECT_ROOT if PROJECT_ROOT.exists() else SCRIPT_DIR
+
+NOTES_FILE = DATA_DIR / "learning_notes.txt"
+STREAM_FILE = DATA_DIR / "learning_stream.txt"
+WINDOW_SCRIPT = SCRIPT_DIR / "learning_window.py"
 
 learning_mode = False
 _learning_process: Optional[subprocess.Popen] = None
@@ -117,7 +120,7 @@ def start_learning_window() -> None:
 
     _learning_process = subprocess.Popen(
         [sys.executable, str(WINDOW_SCRIPT)],
-        cwd=str(BASE_DIR),
+        cwd=str(SCRIPT_DIR),
     )
     learning_mode = True
 

@@ -4,7 +4,24 @@ import json
 import queue
 from pathlib import Path
 
-MODEL_DIR = Path(__file__).resolve().parent / "vosk-model-small-en-us-0.15"
+MODULE_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = MODULE_DIR.parent
+
+
+def _resolve_vosk_model_dir() -> Path:
+    """
+    Support both layouts:
+    - voicegit/vosk-model-small-en-us-0.15
+    - <project-root>/vosk-model-small-en-us-0.15
+    """
+    root_candidate = PROJECT_ROOT / "vosk-model-small-en-us-0.15"
+    module_candidate = MODULE_DIR / "vosk-model-small-en-us-0.15"
+    if root_candidate.exists():
+        return root_candidate
+    return module_candidate
+
+
+MODEL_DIR = _resolve_vosk_model_dir()
 
 
 def listen_and_transcribe() -> str | None:
