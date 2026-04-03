@@ -4,3 +4,5 @@ git push origin main -> Uploads your commits to the remote repository
 git push origin main -> Uploads your commits to the remote repository
 git log -> Shows commit history
 git status -> Shows working tree status (staged, modified, untracked)
+git commit -m "learning window fixed" -> Saves a snapshot of your project locally
+git push origin main -> Uploads your commits to the remote repository

@@ -29,3 +29,9 @@ Explanation: Switches branches or restores working tree files
 Command: git commit -m "separated files and improved logic"
 Explanation: Saves a snapshot of your project locally
 
+Command: git commit -m "learning window fixed"
+Explanation: Saves a snapshot of your project locally
+
+Command: git commit -m "project completed"
+Explanation: Saves a snapshot of your project locally
+

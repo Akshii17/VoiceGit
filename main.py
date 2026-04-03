@@ -69,7 +69,7 @@ def process_learning(commands: List[str]) -> None:
 def show_help() -> None:
     print("Supported commands:")
     print("  Natural language (ML): create_branch, merge_branch, commit, push,")
-    print("    pull, status, add, log, diff, clone, init, stash, reset")
+    print("  pull, status, add, log, diff, clone, init, stash, reset")
     print("  state   - show parsed repository state")
     print("  voice on / voice off - voice input toggle")
     print("  learn / close learn - learning window")
@@ -187,6 +187,15 @@ def main() -> None:
             try:
                 transcribed = listen_and_transcribe()
                 if transcribed is None:
+                    retry = input("No speech detected. Try voice again? (y/n) ").strip().lower()
+                    if retry in {"y", "yes"}:
+                        continue
+                    print("Falling back to text input.")
+                    user_cmd = input("Enter command: ").strip()
+                    if not user_cmd:
+                        continue
+                    if not handle_command_text(user_cmd):
+                        return
                     continue
                 user_cmd = transcribed.strip()
             except RuntimeError as e:

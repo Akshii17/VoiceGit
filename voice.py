@@ -45,7 +45,8 @@ def listen_and_transcribe() -> str | None:
             channels=1,
             callback=callback,
         ):
-            for _ in range(20):
+            # Wait longer (~20s) before declaring no speech.
+            for _ in range(40):
                 data = q.get(timeout=0.5)
                 if data:
                     heard_any_audio = True
