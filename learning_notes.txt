@@ -35,3 +35,9 @@ Explanation: Saves a snapshot of your project locally
 Command: git commit -m "project completed"
 Explanation: Saves a snapshot of your project locally
 
+Command: git checkout Akshi
+Explanation: Switches branches or restores working tree files
+
+Command: git commit -m "changes"
+Explanation: Saves a snapshot of your project locally
+
